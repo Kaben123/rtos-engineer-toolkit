@@ -1,0 +1,31 @@
+#!/usr/bin/env bash
+# SessionStart hook for rtos-engineer-toolkit plugin
+
+set -euo pipefail
+
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+PLUGIN_ROOT="$(cd "${SCRIPT_DIR}/.." && pwd)"
+
+escape_for_json() {
+    local s="$1"
+    s="${s//\\/\\\\}"
+    s="${s//\"/\\\"}"
+    s="${s//$'\n'/\\n}"
+    s="${s//$'\r'/\\r}"
+    s="${s//$'\t'/\\t}"
+    printf '%s' "$s"
+}
+
+session_context="<rtos-engineer-guardrails>\n\n## Quality Guardrails (Always Active)\n\n1. **Verify before trust** — Claude-generated APIs may not exist. Always grep the source tree to confirm before using in code.\n2. **No secrets in context** — Never accept keys, tokens, or credentials pasted into the conversation.\n3. **Every change must be verifiable** — For any code change, answer: how do I verify this is correct?\n4. **Human decides architecture** — Propose options, never make architectural decisions unilaterally.\n5. **Build → Static check → Test → Real device** — This pipeline is non-negotiable for kernel code.\n\n## Knowledge-Driven Workflow\n\nThis project uses .claude/rtos-knowledge/ for project-specific rules. Skills read from:\n- profile.md — RTOS type and project info\n- coding-style.md — style rules for review\n- build.md — build commands\n- toolchain.md — debug tools and paths\n- conventions.md — commit format and push model\n\nIf .claude/rtos-knowledge/ does not exist, guide the user to run the project-init skill first.\n\n## RTOS Best Practices\n\n- No blocking calls in ISR context (malloc, mutex_lock, sem_wait, sleep)\n- Every alloc path must have a corresponding free path\n- Assert/panic is a symptom — always dig to the real root cause\n- Performance claims require baseline data before and after\n\n</rtos-engineer-guardrails>"
+
+escaped_context=$(escape_for_json "$session_context")
+
+if [ -n "${CURSOR_PLUGIN_ROOT:-}" ]; then
+  printf '{\n  "additional_context": "%s"\n}\n' "$escaped_context"
+elif [ -n "${CLAUDE_PLUGIN_ROOT:-}" ] && [ -z "${COPILOT_CLI:-}" ]; then
+  printf '{\n  "hookSpecificOutput": {\n    "hookEventName": "SessionStart",\n    "additionalContext": "%s"\n  }\n}\n' "$escaped_context"
+else
+  printf '{\n  "additionalContext": "%s"\n}\n' "$escaped_context"
+fi
+
+exit 0
