@@ -1,0 +1,8 @@
+{
+  "name": "rtos-engineer-toolkit",
+  "version": "1.1.0",
+  "description": "Universal RTOS kernel engineer toolkit: knowledge-driven workflow routing, kernel code review, commit standards, and crash analysis guidance. Works with any RTOS (NuttX, Zephyr, FreeRTOS, RT-Thread, etc.) via project-local knowledge documents.",
+  "author": {
+    "name": "RTOS Team"
+  }
+}
