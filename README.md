@@ -65,6 +65,19 @@ claude plugin list
     Status: ✔ enabled
 ```
 
+卸载：
+
+```bash
+claude plugin uninstall rtos-engineer-toolkit@rtos-engineer-toolkit-marketplace
+claude plugin marketplace remove rtos-engineer-toolkit-marketplace
+```
+
+更新：
+
+```bash
+claude plugin update rtos-engineer-toolkit@rtos-engineer-toolkit-marketplace
+```
+
 ### 方式 2：开发模式（本地调试）
 
 克隆仓库后直接指定路径启动，无需注册 marketplace：
@@ -72,19 +85,6 @@ claude plugin list
 ```bash
 git clone https://github.com/Kaben123/rtos-engineer-toolkit.git
 claude --plugin-dir ./rtos-engineer-toolkit
-```
-
-### 卸载
-
-```bash
-claude plugin uninstall rtos-engineer-toolkit@rtos-engineer-toolkit-marketplace
-claude plugin marketplace remove rtos-engineer-toolkit-marketplace
-```
-
-### 更新
-
-```bash
-claude plugin update rtos-engineer-toolkit@rtos-engineer-toolkit-marketplace
 ```
 
 ## 首次使用
