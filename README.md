@@ -42,34 +42,50 @@
 
 ## 安装方式
 
-### 方式 1：开发模式（推荐试用）
+### 方式 1：Marketplace 安装（推荐）
+
+本仓库自包含 marketplace 元数据，可直接作为 marketplace 注册并安装：
 
 ```bash
-claude --plugin-dir /path/to/temp/plugin/
+# 1. 注册 marketplace（GitHub 仓库方式）
+claude plugin marketplace add Kaben123/rtos-engineer-toolkit
+
+# 2. 安装插件
+claude plugin install rtos-engineer-toolkit@rtos-engineer-toolkit-marketplace
+
+# 3. 验证
+claude plugin list
 ```
 
-### 方式 2：用户级持久安装
+安装成功后显示：
+
+```
+  ❯ rtos-engineer-toolkit@rtos-engineer-toolkit-marketplace
+    Version: 1.1.0
+    Status: ✔ enabled
+```
+
+### 方式 2：开发模式（本地调试）
+
+克隆仓库后直接指定路径启动，无需注册 marketplace：
 
 ```bash
-mkdir -p ~/.claude/plugins/cache/local/rtos-engineer-toolkit/1.1.0
-cp -r /path/to/temp/plugin/* ~/.claude/plugins/cache/local/rtos-engineer-toolkit/1.1.0/
+git clone https://github.com/Kaben123/rtos-engineer-toolkit.git
+claude --plugin-dir ./rtos-engineer-toolkit
 ```
 
-在 `~/.claude/settings.json` 中启用：
+### 卸载
 
-```json
-{
-  "enabledPlugins": {
-    "rtos-engineer-toolkit@local": true
-  }
-}
+```bash
+claude plugin uninstall rtos-engineer-toolkit@rtos-engineer-toolkit-marketplace
+claude plugin marketplace remove rtos-engineer-toolkit-marketplace
 ```
 
-### 方式 3：团队 Git 仓库分发
+### 更新
 
-1. 将 plugin 目录推送到内部 Git 仓库
-2. 创建 marketplace.json 引用该仓库
-3. 团队成员通过 `/plugin install` 安装
+```bash
+claude plugin update rtos-engineer-toolkit@rtos-engineer-toolkit-marketplace
+```
 
 ## 首次使用
 
@@ -136,24 +152,25 @@ skills/<new-skill>/SKILL.md
 ## 目录结构
 
 ```
-temp/plugin/
+rtos-engineer-toolkit/
 ├── .claude-plugin/
-│   └── plugin.json
+│   ├── plugin.json             # 插件元数据
+│   └── marketplace.json        # Marketplace 注册信息（自包含）
 ├── skills/
-│   ├── project-init/SKILL.md    # 项目初始化（生成知识文档）
-│   ├── rtos-workflow/SKILL.md   # 工作流路由
-│   ├── kernel-review/SKILL.md   # 代码审查
-│   ├── commit-helper/SKILL.md   # 提交助手
-│   ├── crash-guide/SKILL.md     # Crash 分析
-│   ├── task-tracker/SKILL.md    # 任务跟踪
+│   ├── project-init/SKILL.md       # 项目初始化（生成知识文档）
+│   ├── rtos-workflow/SKILL.md      # 工作流路由
+│   ├── kernel-review/SKILL.md      # 代码审查
+│   ├── commit-helper/SKILL.md      # 提交助手
+│   ├── crash-guide/SKILL.md        # Crash 分析
+│   ├── task-tracker/SKILL.md       # 任务跟踪
 │   └── pre-submit-review/SKILL.md  # 提交前审查
 ├── agents/
-│   └── kernel-reviewer.md
+│   └── kernel-reviewer.md          # 内核审阅子 Agent
 ├── hooks/
-│   ├── hooks.json
-│   ├── run-hook.cmd
-│   └── session-start
-├── CLAUDE.md
+│   ├── hooks.json                  # Hook 注册
+│   ├── run-hook.cmd                # 跨平台 hook 启动器
+│   └── session-start               # 会话启动脚本
+├── CLAUDE.md                       # 贡献指南
 ├── README.md
 └── package.json
 ```
