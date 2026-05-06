@@ -1,0 +1,22 @@
+{
+  "name": "rtos-engineer-toolkit-marketplace",
+  "owner": {
+    "name": "RTOS Team"
+  },
+  "metadata": {
+    "description": "RTOS kernel engineer toolkit marketplace",
+    "version": "1.0.0"
+  },
+  "plugins": [
+    {
+      "name": "rtos-engineer-toolkit",
+      "source": {
+        "source": "url",
+        "url": "https://github.com/Kaben123/rtos-engineer-toolkit.git"
+      },
+      "description": "Universal RTOS kernel engineer toolkit: knowledge-driven workflow routing, kernel code review, commit standards, and crash analysis guidance.",
+      "version": "1.1.0",
+      "strict": true
+    }
+  ]
+}
